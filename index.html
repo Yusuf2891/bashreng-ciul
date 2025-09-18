@@ -37,6 +37,7 @@
       width: 100%;
       max-width: 350px;
       border-radius: 10px;
+      cursor: pointer; /* supaya terlihat bisa diklik */
     }
     .thumbnails {
       display: flex;
@@ -111,110 +112,37 @@
       background: #25d366;
       color: white;
     }
+
+    /* CSS untuk popup zoom */
+    .zoom-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    .zoom-overlay img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 10px;
+      transition: transform 0.3s ease;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <!-- Gambar Produk -->
     <div class="product-images">
-      <img id="main-image" src="depan.jpg" alt="Bash Sreng">
+      <img id="main-image" src="depan.jpg" alt="Bash Sreng" onclick="zoomImage(this)">
       <div class="thumbnails">
         <img src="depan.jpg" class="active" onclick="changeImage(this)">
         <img src="original.jpg" onclick="changeImage(this)">
         <img src="sedang.jpg" onclick="changeImage(this)">
-         <img src="pedas.jpg" onclick="changeImage(this)">
-         <img src="pedasbanget.jpg" onclick="changeImage(this)">
-      </div>
-    </div>
-
-    <!-- Info Produk -->
-    <div class="product-info">
-      <h2 id="nama-produk">BASH SRENG Daun Jeruk Gurih Pedas Original 250gr</h2>
-      <div class="price">Rp17.000</div>
-
-      <div class="variants">
-        <button class="active" onclick="selectVariant(this)">Original</button>
-        <button onclick="selectVariant(this)">sedang</button>
-        <button onclick="selectVariant(this)">Pedas</button>
-        <button onclick="selectVariant(this)">Pedas Banget</button>
-      </div>
-
-      <div class="quantity">
-        <button onclick="decreaseQty()">-</button>
-        <input type="number" id="qty" value="1" min="1">
-        <button onclick="increaseQty()">+</button>
-      </div>
-
-      <button class="btn-buy" onclick="kirimPesanan()">Beli Sekarang</button>
-      <a href="https://wa.me/628961435828?text=Halo%20saya%20mau%20pesan%20Bash%20Sreng" class="btn-wa">
-        <i class="fa-brands fa-whatsapp"></i> Chat via WhatsApp
-      </a>
-    </div>
-  </div>
-
-  <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbwfiMAEo8LPoxOB13WhOcJ7CMAXmasAqrK_mlFLi6LvG0YihemNa7MK9fTvzegP3_fblA/exec"; 
-
-    function changeImage(el) {
-      document.getElementById("main-image").src = el.src;
-      document.querySelectorAll(".thumbnails img").forEach(img => img.classList.remove("active"));
-      el.classList.add("active");
-    }
-
-    function selectVariant(el) {
-      document.querySelectorAll(".variants button").forEach(btn => btn.classList.remove("active"));
-      el.classList.add("active");
-    }
-
-    function increaseQty() {
-      let qty = document.getElementById("qty");
-      qty.value = parseInt(qty.value) + 1;
-    }
-
-    function decreaseQty() {
-      let qty = document.getElementById("qty");
-      if (qty.value > 1) qty.value = parseInt(qty.value) - 1;
-    }
-
-    async function kirimPesanan() {
-      const namaProduk = document.getElementById("nama-produk").innerText;
-      const varian = document.querySelector(".variants button.active").innerText;
-      const qty = document.getElementById("qty").value;
-
-      const data = { namaProduk, varian, qty };
-
-      try {
-        await fetch(scriptURL, {
-          method: "POST",
-          mode: "no-cors",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data)
-        });
-        alert("Pesanan berhasil dikirim ke Google Sheet!");
-      } catch (err) {
-        alert("Gagal mengirim pesanan: " + err);
-      }
-    }
-  </script>
-  <!-- Tambahkan tombol untuk masuk admin -->
-<button onclick="bukaAdmin()" style="position: fixed; bottom: 10px; right: 10px; background: #333; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; font-size: 14px;">
-  Admin
-</button>
-
-<script>
-  function bukaAdmin() {
-    const passwordBenar = "240195"; // <== Ubah password sesuai keinginanmu
-    const input = prompt("Masukkan password admin:");
-    if (input === passwordBenar) {
-      window.location.href = "admin.html"; // halaman admin (buat file admin.html)
-    } else {
-      alert("Password salah!");
-    }
-  }
-</script>
-</body>
-</html>
-
-
-
-
+        <img src="pedas.jpg" onclick="changeImage(this)">
+        <img src="pedasbanget.jpg" onclick="changeImage(this)">
