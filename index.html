@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 
   <!-- Font Awesome untuk ikon -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
     body {
@@ -19,119 +19,111 @@
       margin: 0;
       padding: 0;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
     }
 
     .profile-container {
-      width: 380px;
-      margin: 20px;
-      background-color: #1e1e1e;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
-    }
-
-    .profile-header {
-      position: relative;
-      background-color: #222;
       text-align: center;
-      padding-bottom: 60px;
+      margin-top: 40px;
     }
 
-    .banner {
-      width: 100%;
-      display: block;
-    }
-
-    .qr {
-      width: 100px;
-      height: 100px;
+    .profile-container img {
+      width: 120px;
+      height: 120px;
       border-radius: 50%;
-      border: 4px solid #1e1e1e;
-      position: absolute;
-      bottom: -50px;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: white;
-      object-fit: cover;
+      border: 3px solid #25d366;
     }
 
-    .profile-info {
-      padding: 70px 20px 20px 20px;
-    }
-
-    .info-item {
-      display: flex;
-      align-items: center;
-      padding: 12px 0;
-      border-bottom: 1px solid #333;
-    }
-
-    .info-item:last-child {
-      border-bottom: none;
-    }
-
-    .info-icon {
-      color: #00a884;
-      width: 30px;
-      text-align: center;
-      font-size: 18px;
-    }
-
-    a {
-      color: #00a884;
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-
-    /* Tombol WhatsApp */
-    .wa-button {
+    .whatsapp-btn {
       display: inline-block;
-      background-color: #25D366;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #25d366;
       color: white;
-      padding: 10px 15px;
-      border-radius: 8px;
-      font-weight: bold;
-      text-align: center;
-      margin-top: 15px;
+      font-size: 16px;
+      border-radius: 30px;
       text-decoration: none;
-      transition: 0.3s;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      transition: background 0.3s ease;
     }
 
-    .wa-button:hover {
-      background-color: #20b955;
+    .whatsapp-btn:hover {
+      background-color: #1ebe5d;
+    }
+
+    .form-container {
+      background: #222;
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 30px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .form-container input, 
+    .form-container textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: none;
+      border-radius: 6px;
+      outline: none;
+    }
+
+    .form-container button {
+      width: 100%;
+      padding: 10px;
+      background-color: #25d366;
+      border: none;
+      color: white;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .form-container button:hover {
+      background-color: #1ebe5d;
+    }
+
+    #status {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 14px;
     }
   </style>
 </head>
 <body>
-  <div class="profile-container">
-    <!-- Header -->
-    <div class="profile-header">
-      <img src="label.jpg" alt="Banner Profil" class="banner">
-      <img src="sticker.jpg" alt="QR Code" class="qr">
-    </div>
 
-    <!-- Info -->
-    <div class="profile-info">
-      <div class="info-item">
-        <div class="info-icon"><i class="fa-solid fa-user"></i></div>
-        <div>yusuf</div>
-      </div>
-      <div class="form-container">
-    <h2>Isi Data</h2>
+  <div class="profile-container">
+    <img src="label.jpg" alt="Foto Profil">
+    <h2>Nama Kamu</h2>
+    <p>Status: Online ✅</p>
+
+    <!-- Tombol WhatsApp -->
+    <a href="https://wa.me/6289611435828" target="_blank" class="whatsapp-btn">
+      <i class="fa-brands fa-whatsapp"></i> Chat via WhatsApp
+    </a>
+  </div>
+
+  <!-- Form kirim data ke Google Sheet -->
+  <div class="form-container">
+    <h3>Kirim Data Anda</h3>
     <form id="myForm">
-      <input type="text" id="nama" placeholder="Nama Anda" required><br>
-      <input type="date" id="tanggal" required><br>
-      <textarea id="pesan" placeholder="Pesan tambahan"></textarea><br>
+      <input type="text" id="nama" placeholder="Nama Anda" required>
+      <input type="date" id="tanggal" required>
+      <textarea id="pesan" placeholder="Pesan tambahan..."></textarea>
       <button type="submit">Kirim</button>
     </form>
     <p id="status"></p>
   </div>
-      <script>
-    const scriptURL = "PASTE_URL_WEB_APP_DISINI";
+
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbwI8kxWDrlJ-Fyf7ROtIwX06oNdz3spSGzdeD2MdiBLKulVIZnNnxH1HkPVP1FT4w8ZrA/exec";
 
     document.getElementById("myForm").addEventListener("submit", e => {
       e.preventDefault();
@@ -150,42 +142,6 @@
       .catch(err => document.getElementById("status").innerText = "❌ Gagal: " + err);
     });
   </script>
-</body>
 
-      <div class="info-item">
-        <div class="info-icon"><i class="fa-brands fa-whatsapp"></i></div>
-        <div>
-          <a href="https://wa.me/6289611435828?text=Halo%20saya%20tertarik%20dengan%20produk%20Anda!" target="_blank">
-            +62 896-1143-5828
-          </a>
-          <br>
-          <a class="wa-button" href="https://wa.me/6289611435828?text=Halo%20saya%20tertarik%20dengan%20produk%20Anda!" target="_blank">
-            Chat via WhatsApp
-          </a>
-        </div>
-      </div>
-
-      <div class="info-item">
-        <div class="info-icon"><i class="fa-solid fa-briefcase"></i></div>
-        <div>Bisnis lain</div>
-      </div>
-
-      <div class="info-item">
-        <div class="info-icon"><i class="fa-solid fa-envelope"></i></div>
-        <div>Email address</div>
-      </div>
-
-      <div class="info-item">
-        <div class="info-icon"><i class="fa-solid fa-link"></i></div>
-        <div><a href="https://linktr.ee/ys.shoop" target="_blank">https://linktr.ee/ys.shoop</a></div>
-      </div>
-
-      <div class="info-item">
-        <div class="info-icon"><i class="fa-solid fa-cart-shopping"></i></div>
-        <div><a href="https://shopee.co.id/product/1034515974/40509073742/" target="_blank">Produk Shopee</a></div>
-      </div>
-    </div>
-  </div>
 </body>
 </html>
-
