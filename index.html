@@ -120,6 +120,37 @@
         <div class="info-icon"><i class="fa-solid fa-user"></i></div>
         <div>yusuf</div>
       </div>
+      <div class="form-container">
+    <h2>Isi Data</h2>
+    <form id="myForm">
+      <input type="text" id="nama" placeholder="Nama Anda" required><br>
+      <input type="date" id="tanggal" required><br>
+      <textarea id="pesan" placeholder="Pesan tambahan"></textarea><br>
+      <button type="submit">Kirim</button>
+    </form>
+    <p id="status"></p>
+  </div>
+      <script>
+    const scriptURL = "PASTE_URL_WEB_APP_DISINI";
+
+    document.getElementById("myForm").addEventListener("submit", e => {
+      e.preventDefault();
+
+      const data = {
+        nama: document.getElementById("nama").value,
+        tanggal: document.getElementById("tanggal").value,
+        pesan: document.getElementById("pesan").value
+      };
+
+      fetch(scriptURL, {
+        method: "POST",
+        body: JSON.stringify(data)
+      })
+      .then(res => document.getElementById("status").innerText = "✅ Data terkirim!")
+      .catch(err => document.getElementById("status").innerText = "❌ Gagal: " + err);
+    });
+  </script>
+</body>
 
       <div class="info-item">
         <div class="info-icon"><i class="fa-brands fa-whatsapp"></i></div>
@@ -157,3 +188,4 @@
   </div>
 </body>
 </html>
+
