@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daftar Pesanan</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+    }
+    h2 {
+      text-align: center;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background: #ff6600;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <h2>📦 Daftar Pesanan Masuk</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Nama Produk</th>
+        <th>Varian</th>
+        <th>Qty</th>
+        <th>Tanggal</th>
+      </tr>
+    </thead>
+    <tbody id="data-pesanan">
+      <tr><td colspan="4" style="text-align:center;">Memuat data...</td></tr>
+    </tbody>
+  </table>
+
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbyl_qVAdmrNjNUUuhAd33p6QOoCeh5nBkSzrBBesVIel0vIcjl5AvR6uNqr_GmS4u-WkA/exec";
+
+    async function loadPesanan() {
+      try {
+        const response = await fetch(scriptURL);
+        const data = await response.json();
+
+        let rows = "";
+        if (data.length === 0) {
+          rows = `<tr><td colspan="4" style="text-align:center;">Belum ada pesanan</td></tr>`;
+        } else {
+          data.forEach(p => {
+            rows += `<tr>
+              <td>${p.namaProduk}</td>
+              <td>${p.varian}</td>
+              <td>${p.qty}</td>
+              <td>${new Date(p.tanggal).toLocaleString()}</td>
+            </tr>`;
+          });
+        }
+        document.getElementById("data-pesanan").innerHTML = rows;
+      } catch (err) {
+        document.getElementById("data-pesanan").innerHTML = 
+          `<tr><td colspan="4" style="color:red;text-align:center;">Gagal memuat data: ${err}</td></tr>`;
+      }
+    }
+
+    loadPesanan();
+    // Auto refresh setiap 10 detik
+    setInterval(loadPesanan, 10000);
+  </script>
+</body>
+</html>
