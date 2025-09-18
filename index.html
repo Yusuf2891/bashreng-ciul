@@ -1,150 +1,197 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Profil WhatsApp</title>
-
-  <!-- Font WhatsApp-like -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-
-  <!-- Font Awesome untuk ikon -->
+  <title>Bash Sreng - Toko Online</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
   <style>
     body {
-      background-color: #111;
-      color: white;
       font-family: 'Roboto', sans-serif;
+      background: #f9f9f9;
       margin: 0;
       padding: 0;
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
+      justify-content: center;
+      align-items: flex-start;
       min-height: 100vh;
     }
-
-    .profile-container {
-      text-align: center;
-      margin-top: 40px;
-    }
-
-    .profile-container img {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      border: 3px solid #25d366;
-    }
-
-    .whatsapp-btn {
-      display: inline-block;
-      margin-top: 20px;
-      padding: 10px 20px;
-      background-color: #25d366;
-      color: white;
-      font-size: 16px;
-      border-radius: 30px;
-      text-decoration: none;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-      transition: background 0.3s ease;
-    }
-
-    .whatsapp-btn:hover {
-      background-color: #1ebe5d;
-    }
-
-    .form-container {
-      background: #222;
-      padding: 20px;
-      border-radius: 12px;
+    .container {
+      display: flex;
+      background: white;
       margin-top: 30px;
-      width: 90%;
-      max-width: 400px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      max-width: 900px;
+      overflow: hidden;
     }
-
-    .form-container input, 
-    .form-container textarea {
+    .product-images {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: #fff;
+      padding: 15px;
+    }
+    .product-images img {
       width: 100%;
-      padding: 10px;
-      margin-bottom: 10px;
-      border: none;
-      border-radius: 6px;
-      outline: none;
+      max-width: 350px;
+      border-radius: 10px;
     }
-
-    .form-container button {
-      width: 100%;
-      padding: 10px;
-      background-color: #25d366;
-      border: none;
-      color: white;
-      font-weight: bold;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    .form-container button:hover {
-      background-color: #1ebe5d;
-    }
-
-    #status {
-      text-align: center;
+    .thumbnails {
+      display: flex;
+      gap: 5px;
       margin-top: 10px;
-      font-size: 14px;
+    }
+    .thumbnails img {
+      width: 50px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      border-radius: 5px;
+    }
+    .thumbnails img.active {
+      border-color: #ff6600;
+    }
+    .product-info {
+      flex: 1;
+      padding: 20px;
+    }
+    .product-info h2 {
+      margin: 0 0 10px;
+    }
+    .price {
+      color: #e63946;
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .variants button {
+      border: 1px solid #ddd;
+      background: #fff;
+      padding: 8px 15px;
+      margin-right: 5px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    .variants button.active {
+      border-color: #ff6600;
+      color: #ff6600;
+      font-weight: bold;
+    }
+    .quantity {
+      margin: 15px 0;
+    }
+    .quantity button {
+      padding: 5px 10px;
+      border: none;
+      background: #ddd;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .quantity input {
+      width: 50px;
+      text-align: center;
+      font-size: 16px;
+      border: 1px solid #ddd;
+    }
+    .btn-buy, .btn-wa {
+      display: inline-block;
+      text-decoration: none;
+      padding: 10px 20px;
+      margin: 10px 5px 0 0;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+    .btn-buy {
+      background: #ff6600;
+      color: white;
+      cursor: pointer;
+    }
+    .btn-wa {
+      background: #25d366;
+      color: white;
     }
   </style>
 </head>
 <body>
+  <div class="container">
+    <!-- Gambar Produk -->
+    <div class="product-images">
+      <img id="main-image" src="depan.jpg" alt="Bash Sreng">
+      <div class="thumbnails">
+        <img src="original.jpg" class="active" onclick="changeImage(this)">
+        <img src="sedang.jpg" onclick="changeImage(this)">
+        <img src="pedas.jpg" onclick="changeImage(this)">
+      </div>
+    </div>
 
-  <div class="profile-container">
-    <img src="sticker.jpg" alt="Foto Profil">
-    <h2>CIUL SNACK</h2>
-    <p>Status: Online ✅</p>
+    <!-- Info Produk -->
+    <div class="product-info">
+      <h2 id="nama-produk">BASH SRENG Daun Jeruk Gurih Pedas Original 250gr</h2>
+      <div class="price">Rp17.000</div>
 
-    <!-- Tombol WhatsApp -->
-    <a href="https://wa.me/6289611435828" target="_blank" class="whatsapp-btn">
-      <i class="fa-brands fa-whatsapp"></i> Chat via WhatsApp
-    </a>
-  </div>
+      <div class="variants">
+        <button class="active" onclick="selectVariant(this)">Original</button>
+        <button onclick="selectVariant(this)">Pedas</button>
+        <button onclick="selectVariant(this)">Pedas Banget</button>
+      </div>
 
-  <!-- Form kirim data ke Google Sheet -->
-  <div class="form-container">
-    <h3>PESAN</h3>
-    <form id="myForm">
-      <input type="text" id="nama" placeholder="Nama Anda" required>
-      <input type="date" id="tanggal" required>
-      <textarea id="pesan" placeholder="Pesan tambahan..."></textarea>
-      <button type="submit">Kirim</button>
-    </form>
-    <p id="status"></p>
+      <div class="quantity">
+        <button onclick="decreaseQty()">-</button>
+        <input type="number" id="qty" value="1" min="1">
+        <button onclick="increaseQty()">+</button>
+      </div>
+
+      <button class="btn-buy" onclick="kirimPesanan()">Beli Sekarang</button>
+      <a href="https://wa.me/628961435828?text=Halo%20saya%20mau%20pesan%20Bash%20Sreng" class="btn-wa">
+        <i class="fa-brands fa-whatsapp"></i> Chat via WhatsApp
+      </a>
+    </div>
   </div>
 
   <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbyp7UzE0zwXSnT4ues25L1qMwnX3vnhWYUnZ8JF8ibmEJ5QGmok-_FIlCfa-EzmRkpa5w/exec";
+    const scriptURL = "https://script.google.com/macros/s/AKfycbwfiMAEo8LPoxOB13WhOcJ7CMAXmasAqrK_mlFLi6LvG0YihemNa7MK9fTvzegP3_fblA/exec"; 
 
-    document.getElementById("myForm").addEventListener("submit", e => {
-      e.preventDefault();
+    function changeImage(el) {
+      document.getElementById("main-image").src = el.src;
+      document.querySelectorAll(".thumbnails img").forEach(img => img.classList.remove("active"));
+      el.classList.add("active");
+    }
 
-      const data = {
-        nama: document.getElementById("nama").value,
-        tanggal: document.getElementById("tanggal").value,
-        pesan: document.getElementById("pesan").value
-      };
+    function selectVariant(el) {
+      document.querySelectorAll(".variants button").forEach(btn => btn.classList.remove("active"));
+      el.classList.add("active");
+    }
 
-      fetch(scriptURL, {
-        method: "POST",
-        body: JSON.stringify(data)
-      })
-      .then(res => document.getElementById("status").innerText = "✅ Data terkirim!")
-      .catch(err => document.getElementById("status").innerText = "❌ Gagal: " + err);
-    });
+    function increaseQty() {
+      let qty = document.getElementById("qty");
+      qty.value = parseInt(qty.value) + 1;
+    }
+
+    function decreaseQty() {
+      let qty = document.getElementById("qty");
+      if (qty.value > 1) qty.value = parseInt(qty.value) - 1;
+    }
+
+    async function kirimPesanan() {
+      const namaProduk = document.getElementById("nama-produk").innerText;
+      const varian = document.querySelector(".variants button.active").innerText;
+      const qty = document.getElementById("qty").value;
+
+      const data = { namaProduk, varian, qty };
+
+      try {
+        await fetch(scriptURL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+        alert("Pesanan berhasil dikirim ke Google Sheet!");
+      } catch (err) {
+        alert("Gagal mengirim pesanan: " + err);
+      }
+    }
   </script>
-
 </body>
 </html>
-
-
-
