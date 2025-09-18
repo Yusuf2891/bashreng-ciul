@@ -37,7 +37,7 @@
       width: 100%;
       max-width: 350px;
       border-radius: 10px;
-      cursor: pointer; /* supaya terlihat bisa diklik */
+      cursor: pointer;
     }
     .thumbnails {
       display: flex;
@@ -126,12 +126,25 @@
       justify-content: center;
       align-items: center;
       z-index: 9999;
+      flex-direction: column;
     }
     .zoom-overlay img {
       max-width: 90%;
       max-height: 90%;
       border-radius: 10px;
       transition: transform 0.3s ease;
+    }
+    .zoom-controls {
+      margin-top: 10px;
+    }
+    .zoom-btn {
+      background: white;
+      border: none;
+      margin: 5px;
+      padding: 10px 15px;
+      font-size: 20px;
+      border-radius: 5px;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -175,12 +188,17 @@
   </div>
 
   <!-- Overlay Zoom -->
-  <div id="zoom-overlay" class="zoom-overlay" onclick="closeZoom()">
+  <div id="zoom-overlay" class="zoom-overlay" onclick="closeZoom(event)">
     <img id="zoomed-image" src="">
+    <div class="zoom-controls">
+      <button class="zoom-btn" onclick="zoomIn(event)">+</button>
+      <button class="zoom-btn" onclick="zoomOut(event)">-</button>
+    </div>
   </div>
 
   <script>
     const scriptURL = "https://script.google.com/macros/s/AKfycbwfiMAEo8LPoxOB13WhOcJ7CMAXmasAqrK_mlFLi6LvG0YihemNa7MK9fTvzegP3_fblA/exec";
+    let zoomScale = 1;
 
     function changeImage(el) {
       document.getElementById("main-image").src = el.src;
@@ -223,14 +241,29 @@
       }
     }
 
-    // Fungsi zoom
     function zoomImage(img) {
       document.getElementById("zoomed-image").src = img.src;
       document.getElementById("zoom-overlay").style.display = "flex";
+      zoomScale = 1;
+      document.getElementById("zoomed-image").style.transform = `scale(${zoomScale})`;
     }
 
-    function closeZoom() {
-      document.getElementById("zoom-overlay").style.display = "none";
+    function closeZoom(event) {
+      if (event.target.id === "zoom-overlay") {
+        document.getElementById("zoom-overlay").style.display = "none";
+      }
+    }
+
+    function zoomIn(event) {
+      event.stopPropagation();
+      zoomScale += 0.2;
+      document.getElementById("zoomed-image").style.transform = `scale(${zoomScale})`;
+    }
+
+    function zoomOut(event) {
+      event.stopPropagation();
+      if (zoomScale > 0.4) zoomScale -= 0.2;
+      document.getElementById("zoomed-image").style.transform = `scale(${zoomScale})`;
     }
   </script>
 
@@ -241,7 +274,7 @@
 
   <script>
     function bukaAdmin() {
-      const passwordBenar = "240195"; 
+      const passwordBenar = "240195";
       const input = prompt("Masukkan password admin:");
       if (input === passwordBenar) {
         window.location.href = "admin.html";
