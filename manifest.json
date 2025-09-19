@@ -1,0 +1,21 @@
+{
+  "name": "Bash Sreng",
+  "short_name": "BashSreng",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ff6600",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "depan.jpg",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "original.jpg",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
