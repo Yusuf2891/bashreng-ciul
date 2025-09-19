@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bash Sreng - Toko Online</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#ff6600">
+
   <style>
     body {
       font-family: 'Roboto', sans-serif;
@@ -275,7 +280,13 @@
     }
 
     ambilUlasan();
+
+    // PWA - Registrasi Service Worker
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("service-worker.js")
+        .then(() => console.log("Service Worker terdaftar!"))
+        .catch(err => console.log("SW gagal:", err));
+    }
   </script>
 </body>
 </html>
-
