@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bash Sreng - Toko Online</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -12,8 +12,8 @@
       margin: 0;
       padding: 0;
       display: flex;
-      justify-content: center;
-      align-items: flex-start;
+      flex-direction: column;
+      align-items: center;
       min-height: 100vh;
     }
     .container {
@@ -57,7 +57,9 @@
       flex: 1;
       padding: 20px;
     }
-    .product-info h2 { margin: 0 0 10px; }
+    .product-info h2 {
+      margin: 0 0 10px;
+    }
     .price {
       color: #e63946;
       font-size: 24px;
@@ -77,7 +79,9 @@
       color: #ff6600;
       font-weight: bold;
     }
-    .quantity { margin: 15px 0; }
+    .quantity {
+      margin: 15px 0;
+    }
     .quantity button {
       padding: 5px 10px;
       border: none;
@@ -101,85 +105,25 @@
     }
     .btn-buy { background: #ff6600; color: white; cursor: pointer; }
     .btn-wa { background: #25d366; color: white; }
-
-    /* ---------- Zoom overlay (fixed, hidden by default) ---------- */
-    .zoom-overlay {
-      display: none;               /* HIDDEN by default */
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      background: rgba(0,0,0,0.8);
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-      overflow: hidden;
-    }
-
-    /* when active, we'll add class "active" to show it */
-    .zoom-overlay.active {
-      display: flex;
-    }
-
-    /* wrapper keeps image centered; image scales but wrapper size doesn't push controls */
-    .zoom-wrapper {
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      max-width: 95%;
-      max-height: 90%;
-    }
-
-    .zoom-wrapper img {
-      max-width: 100%;
-      max-height: 100%;
-      border-radius: 10px;
-      transition: transform 0.25s ease;
-      transform-origin: center center;
-      will-change: transform;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.5);
-    }
-
-    /* controls fixed relative to overlay (not affected by image size) */
-    .zoom-controls {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: 30px;
-      display: flex;
-      gap: 10px;
-      z-index: 10001;
-    }
-
-    .zoom-btn {
+    /* ulasan */
+    .review-section {
+      margin-top: 30px;
       background: white;
-      border: none;
-      margin: 0;
-      padding: 10px 14px;
-      font-size: 20px;
-      border-radius: 6px;
-      cursor: pointer;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      width: 90%;
+      max-width: 900px;
     }
-
-    .zoom-close {
-      position: absolute;
-      top: 18px;
-      right: 18px;
-      background: rgba(255,255,255,0.9);
-      border: none;
-      padding: 8px 10px;
-      border-radius: 6px;
-      cursor: pointer;
-      z-index: 10002;
-      font-weight: bold;
+    .review-list {
+      margin-top: 10px;
     }
-
-    /* small responsiveness */
-    @media (max-width: 600px) {
-      .container { flex-direction: column; margin: 10px; }
-      .product-images img { max-width: 300px; }
-      .zoom-controls { bottom: 16px; }
+    .review {
+      border-bottom: 1px solid #ddd;
+      padding: 5px 0;
+    }
+    .review strong {
+      color: #ff6600;
     }
   </style>
 </head>
@@ -202,6 +146,9 @@
       <h2 id="nama-produk">BASH SRENG Daun Jeruk Gurih Pedas Original 250gr</h2>
       <div class="price">Rp17.000</div>
 
+      <label for="nama">Nama Pemesan:</label>
+      <input type="text" id="nama" placeholder="Masukkan nama Anda" style="width: 90%; padding: 8px; margin: 5px 0;">
+
       <div class="variants">
         <button class="active" onclick="selectVariant(this)">Original</button>
         <button onclick="selectVariant(this)">Sedang</button>
@@ -222,22 +169,19 @@
     </div>
   </div>
 
-  <!-- Overlay Zoom -->
-  <div id="zoom-overlay" class="zoom-overlay" onclick="closeZoom(event)">
-    <div class="zoom-wrapper">
-      <img id="zoomed-image" src="" alt="Zoomed">
-      <!-- close button top-right -->
-      <button class="zoom-close" onclick="closeZoomByBtn(event)">✕</button>
-    </div>
+  <!-- Bagian Ulasan -->
+  <div class="review-section">
+    <h3>Ulasan Pembeli</h3>
+    <div id="review-list" class="review-list"></div>
 
-    <div class="zoom-controls">
-      <button class="zoom-btn" onclick="zoomOut(event)">−</button>
-      <button class="zoom-btn" onclick="zoomIn(event)">+</button>
-    </div>
+    <h4>Tulis Ulasan</h4>
+    <input type="text" id="nama-review" placeholder="Nama Anda" style="width: 100%; padding: 8px; margin-bottom: 5px;">
+    <textarea id="isi-review" placeholder="Tulis ulasan..." style="width: 100%; padding: 8px;"></textarea>
+    <button onclick="kirimUlasan()" class="btn-buy">Kirim</button>
   </div>
 
   <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbwfiMAEo8LPoxOB13WhOcJ7CMAXmasAqrK_mlFLi6LvG0YihemNa7MK9fTvzegP3_fblA/exec";
+    const scriptURL = "MASUKKAN_LINK_GOOGLE_APPS_SCRIPT"; 
 
     function changeImage(el) {
       document.getElementById("main-image").src = el.src;
@@ -261,11 +205,14 @@
     }
 
     async function kirimPesanan() {
+      const nama = document.getElementById("nama").value;
       const namaProduk = document.getElementById("nama-produk").innerText;
       const varian = document.querySelector(".variants button.active").innerText;
       const qty = document.getElementById("qty").value;
 
-      const data = { namaProduk, varian, qty };
+      if (!nama) return alert("Nama harus diisi!");
+
+      const data = { nama, namaProduk, varian, qty };
 
       try {
         await fetch(scriptURL, {
@@ -274,83 +221,44 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data)
         });
-        alert("Pesanan berhasil dikirim ke Google Sheet!");
+        alert("Pesanan berhasil dikirim!");
       } catch (err) {
         alert("Gagal mengirim pesanan: " + err);
       }
     }
 
-    // Zoom logic
-    const overlay = document.getElementById('zoom-overlay');
-    const zoomedImg = document.getElementById('zoomed-image');
-    let zoomScale = 1;
-    const ZOOM_STEP = 0.2;
-    const ZOOM_MIN = 0.4;
-    const ZOOM_MAX = 3;
-
-    function zoomImage(img) {
-      zoomedImg.src = img.src;
-      zoomScale = 1;
-      zoomedImg.style.transform = `scale(${zoomScale})`;
-      overlay.classList.add('active');
-      // prevent body scroll while zoom open
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeZoom(event) {
-      // only close when clicking the overlay background (not child elements)
-      if (event.target === overlay) {
-        overlay.classList.remove('active');
-        document.body.style.overflow = '';
+    async function muatUlasan() {
+      try {
+        const res = await fetch(scriptURL);
+        const data = await res.json();
+        const reviewList = document.getElementById("review-list");
+        reviewList.innerHTML = "";
+        data.forEach(r => {
+          reviewList.innerHTML += `<div class="review"><strong>${r.nama}</strong>: ${r.ulasan}</div>`;
+        });
+      } catch (err) {
+        console.log("Gagal memuat ulasan", err);
       }
     }
 
-    function closeZoomByBtn(event) {
-      event.stopPropagation();
-      overlay.classList.remove('active');
-      document.body.style.overflow = '';
+    async function kirimUlasan() {
+      const nama = document.getElementById("nama-review").value;
+      const ulasan = document.getElementById("isi-review").value;
+      if (!nama || !ulasan) return alert("Lengkapi nama dan ulasan!");
+      const data = { nama, namaProduk: "-", varian: "-", qty: 0, ulasan };
+      await fetch(scriptURL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+      alert("Ulasan berhasil dikirim!");
+      document.getElementById("nama-review").value = "";
+      document.getElementById("isi-review").value = "";
+      muatUlasan();
     }
 
-    function zoomIn(event) {
-      event.stopPropagation();
-      zoomScale = Math.min(ZOOM_MAX, +(zoomScale + ZOOM_STEP).toFixed(2));
-      zoomedImg.style.transform = `scale(${zoomScale})`;
-    }
-
-    function zoomOut(event) {
-      event.stopPropagation();
-      zoomScale = Math.max(ZOOM_MIN, +(zoomScale - ZOOM_STEP).toFixed(2));
-      zoomedImg.style.transform = `scale(${zoomScale})`;
-    }
-
-    // prevent overlay from closing when clicking image or controls
-    document.getElementById('zoomed-image').addEventListener('click', function(e){ e.stopPropagation(); });
-    document.querySelector('.zoom-controls').addEventListener('click', function(e){ e.stopPropagation(); });
-
-    // Optional: close with ESC key
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape' && overlay.classList.contains('active')) {
-        overlay.classList.remove('active');
-        document.body.style.overflow = '';
-      }
-    });
-  </script>
-
-  <!-- Tombol Admin -->
-  <button onclick="bukaAdmin()" style="position: fixed; bottom: 10px; right: 10px; background: #333; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; font-size: 14px;">
-    Admin
-  </button>
-
-  <script>
-    function bukaAdmin() {
-      const passwordBenar = "240195";
-      const input = prompt("Masukkan password admin:");
-      if (input === passwordBenar) {
-        window.location.href = "admin.html";
-      } else {
-        alert("Password salah!");
-      }
-    }
+    window.onload = muatUlasan;
   </script>
 </body>
 </html>
