@@ -12,14 +12,15 @@
       margin: 0;
       padding: 0;
       display: flex;
-      flex-direction: column;
-      align-items: center;
+      justify-content: center;
+      align-items: flex-start;
       min-height: 100vh;
+      flex-direction: column;
     }
     .container {
       display: flex;
       background: white;
-      margin-top: 30px;
+      margin: 30px auto;
       border-radius: 10px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
       max-width: 900px;
@@ -37,7 +38,7 @@
       width: 100%;
       max-width: 350px;
       border-radius: 10px;
-      cursor: pointer;
+      cursor: zoom-in;
     }
     .thumbnails {
       display: flex;
@@ -95,6 +96,17 @@
       font-size: 16px;
       border: 1px solid #ddd;
     }
+    .input-group {
+      margin: 10px 0;
+    }
+    .input-group input, .input-group textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 14px;
+      margin-top: 5px;
+    }
     .btn-buy, .btn-wa {
       display: inline-block;
       text-decoration: none;
@@ -103,27 +115,37 @@
       border-radius: 5px;
       font-weight: bold;
     }
-    .btn-buy { background: #ff6600; color: white; cursor: pointer; }
-    .btn-wa { background: #25d366; color: white; }
-    /* ulasan */
-    .review-section {
-      margin-top: 30px;
-      background: white;
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-      width: 90%;
+    .btn-buy {
+      background: #ff6600;
+      color: white;
+      cursor: pointer;
+    }
+    .btn-wa {
+      background: #25d366;
+      color: white;
+    }
+    /* Ulasan Section */
+    .reviews {
       max-width: 900px;
+      margin: 20px auto;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      padding: 15px;
     }
-    .review-list {
-      margin-top: 10px;
-    }
-    .review {
+    .review-item {
       border-bottom: 1px solid #ddd;
-      padding: 5px 0;
+      padding: 10px 0;
     }
-    .review strong {
+    .review-item:last-child {
+      border-bottom: none;
+    }
+    .review-name {
+      font-weight: bold;
       color: #ff6600;
+    }
+    .review-comment {
+      margin-top: 5px;
     }
   </style>
 </head>
@@ -131,7 +153,7 @@
   <div class="container">
     <!-- Gambar Produk -->
     <div class="product-images">
-      <img id="main-image" src="depan.jpg" alt="Bash Sreng" onclick="zoomImage(this)">
+      <img id="main-image" src="depan.jpg" alt="Bash Sreng">
       <div class="thumbnails">
         <img src="depan.jpg" class="active" onclick="changeImage(this)">
         <img src="original.jpg" onclick="changeImage(this)">
@@ -146,14 +168,21 @@
       <h2 id="nama-produk">BASH SRENG Daun Jeruk Gurih Pedas Original 250gr</h2>
       <div class="price">Rp17.000</div>
 
-      <label for="nama">Nama Pemesan:</label>
-      <input type="text" id="nama" placeholder="Masukkan nama Anda" style="width: 90%; padding: 8px; margin: 5px 0;">
-
       <div class="variants">
         <button class="active" onclick="selectVariant(this)">Original</button>
         <button onclick="selectVariant(this)">Sedang</button>
         <button onclick="selectVariant(this)">Pedas</button>
         <button onclick="selectVariant(this)">Pedas Banget</button>
+      </div>
+
+      <!-- Input Nama & Ulasan -->
+      <div class="input-group">
+        <label for="nama">Nama Pemesan:</label>
+        <input type="text" id="nama" placeholder="Masukkan nama Anda">
+      </div>
+      <div class="input-group">
+        <label for="ulasan">Komentar / Ulasan:</label>
+        <textarea id="ulasan" rows="3" placeholder="Tulis ulasan Anda..."></textarea>
       </div>
 
       <div class="quantity">
@@ -169,19 +198,14 @@
     </div>
   </div>
 
-  <!-- Bagian Ulasan -->
-  <div class="review-section">
+  <!-- Section Ulasan -->
+  <div class="reviews" id="reviews">
     <h3>Ulasan Pembeli</h3>
-    <div id="review-list" class="review-list"></div>
-
-    <h4>Tulis Ulasan</h4>
-    <input type="text" id="nama-review" placeholder="Nama Anda" style="width: 100%; padding: 8px; margin-bottom: 5px;">
-    <textarea id="isi-review" placeholder="Tulis ulasan..." style="width: 100%; padding: 8px;"></textarea>
-    <button onclick="kirimUlasan()" class="btn-buy">Kirim</button>
+    <div id="review-list">Memuat ulasan...</div>
   </div>
 
   <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbxJ6yeGBgcJKa3-JbA7qH9b-A9YdhR1QCfwPRxt8bm_00yC54LKnrxKroKMKf8fzEUEeA/exec"; 
+    const scriptURL = "https://script.google.com/macros/s/AKfycbyAm74t9kqyzuTfRZr5Qs2pq-GVtQqGXMaYYjAg_ZrKuyC2kZ_aKnQQVTesWMuMNUuR/exec"; 
 
     function changeImage(el) {
       document.getElementById("main-image").src = el.src;
@@ -205,14 +229,15 @@
     }
 
     async function kirimPesanan() {
-      const nama = document.getElementById("nama").value;
+      const namaPemesan = document.getElementById("nama").value;
       const namaProduk = document.getElementById("nama-produk").innerText;
       const varian = document.querySelector(".variants button.active").innerText;
       const qty = document.getElementById("qty").value;
+      const komentar = document.getElementById("ulasan").value;
 
-      if (!nama) return alert("Nama harus diisi!");
-
-      const data = { nama, namaProduk, varian, qty };
+      if (!namaPemesan) return alert("Nama wajib diisi!");
+      
+      const data = { namaPemesan, namaProduk, varian, qty, komentar };
 
       try {
         await fetch(scriptURL, {
@@ -221,45 +246,35 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data)
         });
-        alert("Pesanan berhasil dikirim!");
+        alert("Pesanan & ulasan berhasil dikirim!");
+        document.getElementById("nama").value = "";
+        document.getElementById("ulasan").value = "";
+        ambilUlasan(); // refresh ulasan
       } catch (err) {
         alert("Gagal mengirim pesanan: " + err);
       }
     }
 
-    async function muatUlasan() {
+    async function ambilUlasan() {
       try {
-        const res = await fetch(scriptURL);
-        const data = await res.json();
+        const res = await fetch(scriptURL + "?action=getReviews");
+        const ulasan = await res.json();
         const reviewList = document.getElementById("review-list");
         reviewList.innerHTML = "";
-        data.forEach(r => {
-          reviewList.innerHTML += `<div class="review"><strong>${r.nama}</strong>: ${r.ulasan}</div>`;
+
+        ulasan.forEach(item => {
+          const div = document.createElement("div");
+          div.className = "review-item";
+          div.innerHTML = `<div class="review-name">${item.namaPemesan}</div>
+                           <div class="review-comment">${item.komentar}</div>`;
+          reviewList.appendChild(div);
         });
       } catch (err) {
-        console.log("Gagal memuat ulasan", err);
+        document.getElementById("review-list").innerText = "Gagal memuat ulasan.";
       }
     }
 
-    async function kirimUlasan() {
-      const nama = document.getElementById("nama-review").value;
-      const ulasan = document.getElementById("isi-review").value;
-      if (!nama || !ulasan) return alert("Lengkapi nama dan ulasan!");
-      const data = { nama, namaProduk: "-", varian: "-", qty: 0, ulasan };
-      await fetch(scriptURL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      });
-      alert("Ulasan berhasil dikirim!");
-      document.getElementById("nama-review").value = "";
-      document.getElementById("isi-review").value = "";
-      muatUlasan();
-    }
-
-    window.onload = muatUlasan;
+    ambilUlasan();
   </script>
 </body>
 </html>
-
