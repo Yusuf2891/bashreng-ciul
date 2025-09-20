@@ -24,8 +24,9 @@
     }
     .container {
       display: flex;
+      flex-direction: column;
       background: white;
-      margin: 30px auto;
+      margin: 10px auto;
       border-radius: 10px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
       max-width: 900px;
@@ -49,6 +50,8 @@
       display: flex;
       gap: 5px;
       margin-top: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
     }
     .thumbnails img {
       width: 50px;
@@ -76,7 +79,7 @@
       border: 1px solid #ddd;
       background: #fff;
       padding: 8px 15px;
-      margin-right: 5px;
+      margin: 3px 3px;
       cursor: pointer;
       border-radius: 5px;
     }
@@ -152,6 +155,35 @@
     .review-comment {
       margin-top: 5px;
     }
+    /* Floating WA Button */
+    .wa-float {
+      position: fixed;
+      width: 55px;
+      height: 55px;
+      bottom: 20px;
+      right: 20px;
+      background-color: #25d366;
+      color: #fff;
+      border-radius: 50%;
+      text-align: center;
+      font-size: 28px;
+      box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+      animation: pulse 1.5s infinite;
+      transition: transform 0.2s ease-in-out;
+    }
+    .wa-float:hover {
+      transform: scale(1.1);
+      background-color: #20bd5a;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
   </style>
 </head>
 <body>
@@ -197,9 +229,6 @@
       </div>
 
       <button class="btn-buy" onclick="kirimPesanan()">Beli Sekarang</button>
-      <a href="https://wa.me/628961435828?text=Halo%20saya%20mau%20pesan%20Bash%20Sreng" class="btn-wa">
-        <i class="fa-brands fa-whatsapp"></i> Chat via WhatsApp
-      </a>
     </div>
   </div>
 
@@ -208,6 +237,11 @@
     <h3>Ulasan Pembeli</h3>
     <div id="review-list">Memuat ulasan...</div>
   </div>
+
+  <!-- Floating WhatsApp Button -->
+  <a href="https://wa.me/628961435828?text=Halo%20saya%20mau%20pesan%20Bash%20Sreng" class="wa-float" target="_blank">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
 
   <script>
     const scriptURL = "https://script.google.com/macros/s/AKfycbyOQ12q14UJeoK4JRRCCwrvEnoRW8VhWfSz9jAqQIFtvAfhTsi4rJYJu_vbEugqMIrMFg/exec"; 
@@ -241,7 +275,7 @@
       const komentar = document.getElementById("ulasan").value;
 
       if (!namaPemesan) return alert("Nama wajib diisi!");
-      
+
       const data = { namaPemesan, namaProduk, varian, qty, komentar };
 
       try {
