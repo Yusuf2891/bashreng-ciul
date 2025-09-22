@@ -26,19 +26,11 @@
       display: flex;
       flex-direction: column;
       background: white;
-      margin: 15px auto;
+      margin: 10px auto;
       border-radius: 10px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
       max-width: 900px;
       overflow: hidden;
-      width: 95%;
-    }
-    .product-images {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      background: #fff;
-      padding: 15px;
     }
     .product-images img {
       width: 100%;
@@ -50,7 +42,6 @@
       display: flex;
       gap: 5px;
       margin-top: 10px;
-      flex-wrap: wrap;
       justify-content: center;
     }
     .thumbnails img {
@@ -78,7 +69,8 @@
       border: 1px solid #ddd;
       background: #fff;
       padding: 8px 15px;
-      margin: 3px 5px 3px 0;
+      margin-right: 5px;
+      margin-bottom: 5px;
       cursor: pointer;
       border-radius: 5px;
     }
@@ -102,9 +94,6 @@
       text-align: center;
       font-size: 16px;
       border: 1px solid #ddd;
-    }
-    .input-group {
-      margin: 10px 0;
     }
     .input-group input, .input-group textarea {
       width: 100%;
@@ -139,7 +128,6 @@
       border-radius: 10px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
       padding: 15px;
-      width: 95%;
     }
     .review-item {
       border-bottom: 1px solid #ddd;
@@ -159,9 +147,10 @@
     .view-counter {
       display: flex;
       align-items: center;
+      justify-content: flex-end;
       font-size: 14px;
-      margin: 10px 0;
       color: #555;
+      margin: 5px 15px 0;
     }
     .view-counter i {
       margin-right: 5px;
@@ -171,6 +160,11 @@
 </head>
 <body>
   <div class="container">
+    <!-- Counter -->
+    <div class="view-counter">
+      <i class="fa-solid fa-eye"></i> <span id="view-count">0</span> kali dilihat
+    </div>
+
     <!-- Gambar Produk -->
     <div class="product-images">
       <img id="main-image" src="depan.jpg" alt="Bash Sreng">
@@ -188,12 +182,6 @@
       <h2 id="nama-produk">BASH SRENG Daun Jeruk Gurih Pedas Original 250gr</h2>
       <div class="price">Rp17.000</div>
 
-      <!-- VIEW COUNTER -->
-      <div class="view-counter">
-        <i class="fa-solid fa-eye"></i>
-        <span id="view-count">Memuat...</span>
-      </div>
-
       <div class="variants">
         <button class="active" onclick="selectVariant(this)">Original</button>
         <button onclick="selectVariant(this)">Sedang</button>
@@ -201,6 +189,7 @@
         <button onclick="selectVariant(this)">Pedas Banget</button>
       </div>
 
+      <!-- Input Nama & Ulasan -->
       <div class="input-group">
         <label for="nama">Nama Pemesan:</label>
         <input type="text" id="nama" placeholder="Masukkan nama Anda">
@@ -230,7 +219,7 @@
   </div>
 
   <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbyOQ12q14UJeoK4JRRCCwrvEnoRW8VhWfSz9jAqQIFtvAfhTsi4rJYJu_vbEugqMIrMFg/exec"; 
+    const scriptURL = "https://script.google.com/macros/s/AKfycby4r158QpCA85ojCJAwmcnOwtuScHMqhGAsNoKCzQwItQ9qvKfccRPksoUwtaRijFb-bg/exec";
 
     function changeImage(el) {
       document.getElementById("main-image").src = el.src;
@@ -299,19 +288,20 @@
       }
     }
 
-    async function ambilViewCount() {
+    async function ambilViewer() {
       try {
         const res = await fetch(scriptURL + "?action=getViews");
         const data = await res.json();
-        document.getElementById("view-count").innerText = data.views + " kali dilihat";
+        document.getElementById("view-count").innerText = data.views;
       } catch (err) {
-        document.getElementById("view-count").innerText = "Gagal memuat.";
+        document.getElementById("view-count").innerText = "-";
       }
     }
 
     ambilUlasan();
-    ambilViewCount();
+    ambilViewer();
 
+    // PWA - Registrasi Service Worker
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("service-worker.js")
         .then(() => console.log("Service Worker terdaftar!"))
