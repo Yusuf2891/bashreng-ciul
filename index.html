@@ -26,14 +26,14 @@
       display: flex;
       flex-direction: column;
       background: white;
-      margin: 10px auto;
+      margin: 15px auto;
       border-radius: 10px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
       max-width: 900px;
       overflow: hidden;
+      width: 95%;
     }
     .product-images {
-      flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -63,7 +63,6 @@
       border-color: #ff6600;
     }
     .product-info {
-      flex: 1;
       padding: 20px;
     }
     .product-info h2 {
@@ -79,7 +78,7 @@
       border: 1px solid #ddd;
       background: #fff;
       padding: 8px 15px;
-      margin: 3px 3px;
+      margin: 3px 5px 3px 0;
       cursor: pointer;
       border-radius: 5px;
     }
@@ -140,6 +139,7 @@
       border-radius: 10px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
       padding: 15px;
+      width: 95%;
     }
     .review-item {
       border-bottom: 1px solid #ddd;
@@ -155,34 +155,17 @@
     .review-comment {
       margin-top: 5px;
     }
-    /* Floating WA Button */
-    .wa-float {
-      position: fixed;
-      width: 55px;
-      height: 55px;
-      bottom: 20px;
-      right: 20px;
-      background-color: #25d366;
-      color: #fff;
-      border-radius: 50%;
-      text-align: center;
-      font-size: 28px;
-      box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+    /* View Counter */
+    .view-counter {
       display: flex;
-      justify-content: center;
       align-items: center;
-      z-index: 999;
-      animation: pulse 1.5s infinite;
-      transition: transform 0.2s ease-in-out;
+      font-size: 14px;
+      margin: 10px 0;
+      color: #555;
     }
-    .wa-float:hover {
-      transform: scale(1.1);
-      background-color: #20bd5a;
-    }
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-      100% { transform: scale(1); }
+    .view-counter i {
+      margin-right: 5px;
+      color: #ff6600;
     }
   </style>
 </head>
@@ -205,6 +188,12 @@
       <h2 id="nama-produk">BASH SRENG Daun Jeruk Gurih Pedas Original 250gr</h2>
       <div class="price">Rp17.000</div>
 
+      <!-- VIEW COUNTER -->
+      <div class="view-counter">
+        <i class="fa-solid fa-eye"></i>
+        <span id="view-count">Memuat...</span>
+      </div>
+
       <div class="variants">
         <button class="active" onclick="selectVariant(this)">Original</button>
         <button onclick="selectVariant(this)">Sedang</button>
@@ -212,7 +201,6 @@
         <button onclick="selectVariant(this)">Pedas Banget</button>
       </div>
 
-      <!-- Input Nama & Ulasan -->
       <div class="input-group">
         <label for="nama">Nama Pemesan:</label>
         <input type="text" id="nama" placeholder="Masukkan nama Anda">
@@ -229,6 +217,9 @@
       </div>
 
       <button class="btn-buy" onclick="kirimPesanan()">Beli Sekarang</button>
+      <a href="https://wa.me/628961435828?text=Halo%20saya%20mau%20pesan%20Bash%20Sreng" class="btn-wa">
+        <i class="fa-brands fa-whatsapp"></i> Chat via WhatsApp
+      </a>
     </div>
   </div>
 
@@ -237,11 +228,6 @@
     <h3>Ulasan Pembeli</h3>
     <div id="review-list">Memuat ulasan...</div>
   </div>
-
-  <!-- Floating WhatsApp Button -->
-  <a href="https://wa.me/628961435828?text=Halo%20saya%20mau%20pesan%20Bash%20Sreng" class="wa-float" target="_blank">
-    <i class="fa-brands fa-whatsapp"></i>
-  </a>
 
   <script>
     const scriptURL = "https://script.google.com/macros/s/AKfycbyOQ12q14UJeoK4JRRCCwrvEnoRW8VhWfSz9jAqQIFtvAfhTsi4rJYJu_vbEugqMIrMFg/exec"; 
@@ -288,7 +274,7 @@
         alert("Pesanan & ulasan berhasil dikirim!");
         document.getElementById("nama").value = "";
         document.getElementById("ulasan").value = "";
-        ambilUlasan(); // refresh ulasan
+        ambilUlasan();
       } catch (err) {
         alert("Gagal mengirim pesanan: " + err);
       }
@@ -313,9 +299,19 @@
       }
     }
 
-    ambilUlasan();
+    async function ambilViewCount() {
+      try {
+        const res = await fetch(scriptURL + "?action=getViews");
+        const data = await res.json();
+        document.getElementById("view-count").innerText = data.views + " kali dilihat";
+      } catch (err) {
+        document.getElementById("view-count").innerText = "Gagal memuat.";
+      }
+    }
 
-    // PWA - Registrasi Service Worker
+    ambilUlasan();
+    ambilViewCount();
+
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("service-worker.js")
         .then(() => console.log("Service Worker terdaftar!"))
