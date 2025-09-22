@@ -101,22 +101,16 @@
       font-size: 14px;
       margin-top: 5px;
     }
-    .btn-buy, .btn-wa {
+    .btn-buy {
       display: inline-block;
       text-decoration: none;
       padding: 10px 20px;
       margin: 10px 5px 0 0;
       border-radius: 5px;
       font-weight: bold;
-    }
-    .btn-buy {
       background: #ff6600;
       color: white;
       cursor: pointer;
-    }
-    .btn-wa {
-      background: #25d366;
-      color: white;
     }
     /* Ulasan Section */
     .reviews {
@@ -153,6 +147,28 @@
     .view-counter i {
       margin-right: 5px;
       color: #ff6600;
+    }
+    /* Floating WhatsApp Button */
+    .floating-wa {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #25d366;
+      color: white;
+      border-radius: 50%;
+      width: 55px;
+      height: 55px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      z-index: 999;
+      cursor: pointer;
+      transition: transform 0.2s ease-in-out;
+    }
+    .floating-wa:hover {
+      transform: scale(1.1);
     }
   </style>
 </head>
@@ -204,9 +220,6 @@
       </div>
 
       <button class="btn-buy" onclick="kirimPesanan()">Beli Sekarang</button>
-      <a href="https://wa.me/628961435828?text=Halo%20saya%20mau%20pesan%20Bash%20Sreng" class="btn-wa">
-        <i class="fa-brands fa-whatsapp"></i> Chat via WhatsApp
-      </a>
     </div>
   </div>
 
@@ -215,6 +228,12 @@
     <h3>Ulasan Pembeli</h3>
     <div id="review-list">Memuat ulasan...</div>
   </div>
+
+  <!-- Floating WhatsApp Button -->
+  <a href="https://wa.me/628961435828?text=Halo%20saya%20mau%20pesan%20Bash%20Sreng"
+     class="floating-wa" target="_blank" rel="noopener">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
 
   <script>
     const scriptURL = "https://script.google.com/macros/s/AKfycbwrNibFIBkWawCdG7P0_NYO2vgOLiOWkwMYsi958Ph9nDvuxZDtaa7SqNs010aXpWBiQQ/exec";
